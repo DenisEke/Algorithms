@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "lib": ["dom", "es2015.promise", "es5","ESNext"],
+    "target": "ES5",
+    "strict": true,
+    "jsx": "react"
+  }
+}
