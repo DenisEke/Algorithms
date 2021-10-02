@@ -15,6 +15,7 @@ const graphConfig = {
     fontSize: 16,
     highlightFontSize: 16,
     labelPosition: "center",
+    labelProperty: "label",
     strokeWidth: 8,
   },
   link: {

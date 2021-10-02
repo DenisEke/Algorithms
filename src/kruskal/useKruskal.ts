@@ -1,8 +1,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { colorTheme } from "../config";
 import { ComponentData, Link, LinkState, Node, NodeState } from "../models";
-import { v4 as uuidv4 } from "uuid";
 import { getRandomGraph } from "../prim/default.config";
+
+let treeCounter = 0;
 
 class Graph {
   nodes: Node[];
@@ -27,8 +28,8 @@ class Graph {
     return this.nodes.filter(comparator);
   }
 
-  getComponentData(): ComponentData {
-    const componentData: ComponentData = { nodes: [], links: [] };
+  getComponentData(): any {
+    const componentData: any = { nodes: [], links: [] };
 
     for (let i = 0; i < this.nodes.length; i++) {
       const node = this.nodes[i];
@@ -37,6 +38,7 @@ class Graph {
         x: node.x,
         y: node.y - 50,
         id: node.id,
+        label: node.id,
         color:
           node.state === NodeState.VISITED
             ? colorTheme.primary.DEFAULT
@@ -121,37 +123,44 @@ class Graph {
 
     const nodeLeft: Node = this.getNode(link.connection[0]) as Node;
     const nodeRight: Node = this.getNode(link.connection[1]) as Node;
+    const treeLeft: string = "" + nodeLeft.treeId;
+    const treeRight: string = "" + nodeRight.treeId;
 
     console.log("nodes (before):", this.nodes);
-    /*
-    This is insanely ugly - TODO: clean this up or comment each condition!
-    */
+
     if (
       nodeLeft.state === NodeState.VISITED &&
       nodeRight.state === NodeState.VISITED
     ) {
-      for (let i = 0; i < this.nodes.length; i++) {
-        if (this.nodes[i].treeId === nodeLeft.treeId) {
-          this.nodes[i].treeId = nodeRight.treeId;
+      console.log("both visited", treeLeft, treeRight);
+      const treeId = "tree" + treeCounter;
+      treeCounter++;
+      this.nodes.forEach((node) => {
+        if (node.treeId == treeLeft || node.treeId == treeRight) {
+          node.treeId = treeId;
+        } else {
+          console.log(
+            "no match for ",
+            node.treeId,
+            nodeLeft.treeId,
+            nodeRight.treeId
+          );
         }
-      }
+      });
     } else if (
-      nodeLeft.state === NodeState.VISITED &&
-      nodeRight.state !== NodeState.VISITED
+      nodeLeft.state === NodeState.VISITED ||
+      nodeRight.state === NodeState.VISITED
     ) {
-      console.log("left");
-      nodeRight.treeId = nodeLeft.treeId;
-    } else if (
-      nodeRight.state === NodeState.VISITED &&
-      nodeLeft.state !== NodeState.VISITED
-    ) {
-      console.log("right");
-      nodeLeft.treeId = nodeRight.treeId;
-    } else {
-      console.log("none");
-      const treeId = uuidv4();
-      nodeLeft.treeId = treeId;
+      console.log("one visited");
+      const treeId = nodeRight.treeId || nodeLeft.treeId;
       nodeRight.treeId = treeId;
+      nodeLeft.treeId = treeId;
+    } else {
+      console.log("none visited");
+      const treeId = "tree" + treeCounter;
+      treeCounter++;
+      nodeRight.treeId = treeId;
+      nodeLeft.treeId = treeId;
     }
 
     (this.getNode(link.connection[0]) as Node).state = NodeState.VISITED;
@@ -224,6 +233,8 @@ export function useKruskal() {
 
   const clickLink = useCallback(
     (source: string, target: string) => {
+      console.log("CLICK");
+
       if (gameOver) {
         alert("GAME OVER. RESET");
         return;
