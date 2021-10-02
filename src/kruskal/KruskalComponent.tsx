@@ -1,7 +1,7 @@
 import * as React from "react";
 // @ts-ignore
 import { Graph } from "react-d3-graph";
-import { usePrim } from "./usePrims";
+import { useKruskal } from "./useKruskal";
 import { colorTheme } from "../config";
 
 const graphConfig = {
@@ -32,33 +32,19 @@ const graphConfig = {
   },
 };
 
-export default function PrimComponent() {
-  const [
-    graphData,
-    nextStep,
-    clickLink,
-    reset,
-    error,
-    solved,
-    chancesLeft,
-    gameOver,
-  ] = usePrim();
+export default function KruskalComponent() {
+  const [graphData, clickLink, reset, error, solved, chancesLeft, gameOver] =
+    useKruskal();
 
   return (
     <div className={"w-full p-4 h-3/6 flex flex-col gap-4"}>
-      <div className={"w-full text-center text-3xl"}>Prims Algorithm</div>
+      <div className={"w-full text-center text-3xl"}>Kruskal Algorithm</div>
       <div className={"w-full text-left"}>
         <div className={"w-full text-xl font-medium"}>
-          How does Prims Algorithm work?
+          How to use this tool?
         </div>
-        ToDo: Add description!
-      </div>
-      <div className={"w-full text-left"}>
-        <div className={"w-full text-xl font-medium"}>
-          How do I use this tool?
-        </div>
-        Click the connections between the nodes in the order of prims algorithm.
-        You can make 3 mistakes.
+        Click the connections between the nodes in the order of kruskals
+        algorithm. You can make 3 mistakes.
         <br />
         <br />
         <span className="bg-primary font-bold ml-4">Dark green</span> indicates
