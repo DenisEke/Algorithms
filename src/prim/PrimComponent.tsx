@@ -47,12 +47,7 @@ export default function PrimComponent() {
   return (
     <div className={"w-full p-4 h-3/6 flex flex-col gap-4"}>
       <div className={"w-full text-center text-3xl"}>Prims Algorithm</div>
-      <div className={"w-full text-left"}>
-        <div className={"w-full text-xl font-medium"}>
-          How does Prims Algorithm work?
-        </div>
-        ToDo: Add description!
-      </div>
+
       <div className={"w-full text-left"}>
         <div className={"w-full text-xl font-medium"}>
           How do I use this tool?
